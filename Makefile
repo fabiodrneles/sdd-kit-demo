@@ -4,7 +4,7 @@ GOLANGCI_LINT_VERSION := v2.14.0
 .DEFAULT_GOAL := ci
 
 .PHONY: ci
-ci: lint test build ## Tudo o que o CI verifica
+ci: lint test build doc-commands linkcheck ## Tudo o que o CI verifica
 
 .PHONY: lint
 lint: ## golangci-lint
@@ -25,3 +25,11 @@ docs: ## markdownlint (o CI também verifica links)
 .PHONY: sdd-check
 sdd-check: ## Rastreabilidade specs × testes × ROADMAP (falha se houver aviso)
 	sh scripts/sdd-check.sh --strict
+
+.PHONY: doc-commands
+doc-commands: ## Os blocos bash do README funcionam
+	sh scripts/doc-commands.sh
+
+.PHONY: linkcheck
+linkcheck: ## O próprio linkcheck verifica a documentação deste repositório
+	go run . .
