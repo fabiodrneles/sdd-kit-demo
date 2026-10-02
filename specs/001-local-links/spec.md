@@ -1,7 +1,7 @@
 # 001 — Links locais e âncoras
 
 - **Prioridade:** P0
-- **Status:** Draft — aguarda as decisões D2 e D3 do dono
+- **Status:** Approved — decisões respondidas pelo dono em 2026-10-02
 - **Código afetado:** `main.go`, `internal/`
 
 ## Contexto
@@ -32,4 +32,4 @@ O caso principal: documentação com links relativos para arquivos que mudaram d
 
 ## Decisões
 
-- Pendentes: D2 e D3 ([ANALYSIS.md §7](../ANALYSIS.md#7-decisões-em-aberto)).
+- D2 e D3 respondidas pelo dono em 2026-10-02 conforme as recomendações de [ANALYSIS.md §7](../ANALYSIS.md#7-decisões-respondidas-pelo-dono-em-2026-10-02).

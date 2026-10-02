@@ -1,7 +1,7 @@
 # 003 — Distribuição
 
 - **Prioridade:** P2
-- **Status:** Draft — aguarda a decisão D4 do dono
+- **Status:** Approved — decisões respondidas pelo dono em 2026-10-02
 - **Código afetado:** `.goreleaser.yml`, `.github/workflows/`, `action.yml`
 
 ## Requisitos funcionais
@@ -18,4 +18,4 @@
 
 ## Decisões
 
-- Pendente: D4 ([ANALYSIS.md §7](../ANALYSIS.md#7-decisões-em-aberto)).
+- D4 respondida pelo dono em 2026-10-02 conforme as recomendações de [ANALYSIS.md §7](../ANALYSIS.md#7-decisões-respondidas-pelo-dono-em-2026-10-02).

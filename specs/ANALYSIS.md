@@ -35,11 +35,11 @@ Só o título. Será escrito na Fase 1, com comandos verificados no CI.
 2. **Fase 2 (P1) → `v0.2.0`:** URLs externas (opcional), saída JSON, configuração de exclusões.
 3. **Fase 3 (P2) → `v1.0.0`:** binários por GoReleaser, versão calculada pelo go-release-manager, GitHub Action.
 
-## 7. Decisões em aberto
+## 7. Decisões (respondidas pelo dono em 2026-10-02)
 
 | ID | Pergunta | Opções | Recomendação |
 |---|---|---|---|
-| D1 | URLs externas (`http(s)://`) são verificadas por padrão? | (a) não: só com `--external`; (b) sim, sempre | **(a)**: a verificação padrão fica determinística e roda offline no CI |
-| D2 | Âncoras (`arquivo.md#secao`) são verificadas? | (a) sim, com os slugs de título do GitHub; (b) não | **(a)**: âncora quebrada é o link quebrado mais comum em documentação |
-| D3 | Formato da saída? | (a) `arquivo:linha: mensagem` (como compiladores, clicável nos editores) e `--format json`; (b) só texto livre | **(a)** |
-| D4 | Como versionar e publicar? | (a) GoReleaser com a versão calculada pelo go-release-manager (Conventional Commits); (b) tags manuais | **(a)**: demonstra o plugin `sdd-release` do kit |
+| D1 | URLs externas (`http(s)://`) são verificadas por padrão? | (a) não: só com `--external`; (b) sim, sempre | **(a)**: a verificação padrão fica determinística e roda offline no CI — **respondida: (a)** |
+| D2 | Âncoras (`arquivo.md#secao`) são verificadas? | (a) sim, com os slugs de título do GitHub; (b) não | **(a)**: âncora quebrada é o link quebrado mais comum em documentação — **respondida: (a)** |
+| D3 | Formato da saída? | (a) `arquivo:linha: mensagem` (como compiladores, clicável nos editores) e `--format json`; (b) só texto livre | **(a)** — **respondida: (a)** |
+| D4 | Como versionar e publicar? | (a) GoReleaser com a versão calculada pelo go-release-manager (Conventional Commits); (b) tags manuais | **(a)**: demonstra o plugin `sdd-release` do kit — **respondida: (a)** |
