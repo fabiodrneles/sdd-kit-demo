@@ -8,9 +8,9 @@ Cada tarefa referencia a spec e os critérios de aceite que ela fecha. Ordem sug
 
 ## Fase 1 — Funcionar de verdade (P0) → `v0.1.0`
 
-- [ ] **T1** Extração de links do Markdown (inline, imagens, referências; ignora código) — 001 FR-2, AC-4
-- [ ] **T2** Verificação de arquivos e âncoras, saída e códigos de saída — 001 FR-1, FR-3 a FR-6, AC-1 a AC-3, AC-5, AC-6
-- [ ] **T3** README com os comandos verificados no CI
+- [x] **T1** Extração de links do Markdown (inline, imagens, referências; ignora código) — 001 FR-2, AC-4
+- [x] **T2** Verificação de arquivos e âncoras, saída e códigos de saída — 001 FR-1, FR-3 a FR-6, AC-1 a AC-3, AC-5, AC-6
+- [x] **T3** README com os comandos verificados no CI
 
 ## Fase 2 — Confiável (P1) → `v0.2.0`
 
