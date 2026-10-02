@@ -21,7 +21,7 @@ O caso principal: documentação com links relativos para arquivos que mudaram d
 
 - **AC-1** Dado `a.md` com `[x](b.md)` e sem `b.md`, quando `linkcheck` roda, então imprime `a.md:1: arquivo não encontrado: b.md` e sai com 1.
 - **AC-2** Dado `a.md` com `[x](#nao-existe)`, quando `linkcheck` roda, então aponta a âncora e sai com 1.
-- **AC-3** Dado `a.md` com `[x](b.md#instalacao)` e `b.md` com `## Instalação`, quando `linkcheck` roda, então sai com 0.
+- **AC-3** Dado `a.md` com `[x](b.md#instalação)` e `b.md` com `## Instalação`, quando `linkcheck` roda, então sai com 0.
 - **AC-4** Dado um link quebrado dentro de um bloco de código cercado, quando `linkcheck` roda, então ele é ignorado.
 - **AC-5** Dado um diretório só com links válidos, quando `linkcheck` roda, então não imprime nada e sai com 0.
 - **AC-6** Dada uma flag desconhecida, quando `linkcheck` roda, então sai com 2.
@@ -29,6 +29,10 @@ O caso principal: documentação com links relativos para arquivos que mudaram d
 ## Fora de escopo
 
 - URLs externas (spec 002).
+
+## Mudanças
+
+- MODIFIED AC-3: a âncora de `## Instalação` é `#instalação`. O slug do GitHub mantém os acentos; o texto anterior, `#instalacao`, contradizia o FR-4 (T2, #6).
 
 ## Decisões
 
