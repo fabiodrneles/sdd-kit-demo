@@ -21,3 +21,10 @@
 ## Decisões
 
 - D1 e D3 respondidas pelo dono em 2026-10-02 conforme as recomendações de [ANALYSIS.md §7](../ANALYSIS.md#7-decisões-respondidas-pelo-dono-em-2026-10-02).
+
+## Mudanças
+
+### Não lançado
+
+- ADDED FR-1 — `--external` e `--timeout`: URLs http(s) verificadas com HEAD (GET se recusado), uma vez cada, até 8 em paralelo (T4, #14).
+- ADDED FR-2 — 2xx e 3xx passam; 4xx/5xx viram `HTTP <status>` e falhas de rede, `erro de rede` (T4, #14).

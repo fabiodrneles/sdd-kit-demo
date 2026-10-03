@@ -127,11 +127,16 @@ func Local(files []string) ([]Problem, error) {
 			}
 		}
 	}
+	Sort(problems)
+	return problems, nil
+}
+
+// Sort orders problems by file and line (spec 001 FR-5).
+func Sort(problems []Problem) {
 	sort.SliceStable(problems, func(i, j int) bool {
 		if problems[i].File != problems[j].File {
 			return problems[i].File < problems[j].File
 		}
 		return problems[i].Line < problems[j].Line
 	})
-	return problems, nil
 }
