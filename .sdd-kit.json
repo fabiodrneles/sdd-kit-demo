@@ -1,13 +1,13 @@
 {
   "kit": "sdd-kit",
-  "version": "v1.3.1",
+  "version": "v1.4.0",
   "lang": "go",
   "project": "sdd-kit-demo",
   "owner": "fabiodrneles",
   "repo": "sdd-kit-demo",
   "files": {
-    ".claude/hooks/session-start.sh": "5f3222ddc791d304388a0aa9bf7121fba461282c23ccfef7fccefd0048c7c0af",
-    ".claude/settings.json": "39bb8a6935b08e49ad68b96e23136cd8e0ab012a1e8dca60c01ab2506fb21651",
+    ".claude/hooks/session-start.sh": "87ef0bddff980cc2cca0c16fbd76ae9d64c1b4ab9c5cbc72b3137b1a388aa10d",
+    ".claude/settings.json": "3c0b58cf0666a4d444c5c1c2acefa691699197532d0c297d6130554c888dbbb8",
     ".github/CODEOWNERS": "38eb4217ea0c5e6aed6896bc2b12313cda972dcf8c8c8befd5857b2fbab5f537",
     ".github/ISSUE_TEMPLATE/bug.yml": "db9bc120441ec8d15263a7381d0c2bbc8c458f2ea141d64b032aa489b22a9b4e",
     ".github/ISSUE_TEMPLATE/config.yml": "0f59414eb521f8ca2a13fb9802134b046ddf1736092b3bb8266a2deb022f7d9d",
@@ -20,20 +20,17 @@
     ".github/workflows/sdd-sync.yml": "3b23b046ac2d52a833b49f29c5745b35c9f563ad17651eda5a412a703121adaa",
     ".markdownlint-cli2.yaml": "17d387a31b80b899acd9136c2dfc448aaab3a281a130dd4b4dcf3f73afa95e01",
     "AGENTS.md": "c8a1cf614aa6a04330e6fa1fdae08ab988783f7251840c72ead92dd622898dd4",
-    "CLAUDE.md": "32d99be0e125c6c615b2c15610dc6075ce4096baf2d3b1e8530b8a534e3c60c3",
+    "CLAUDE.md": "631a441cf45d5ca679cdd9e2ac042e5821809e5a0eb00d5996d394f1071839c1",
     "CONTRIBUTING.md": "61903db008fc699bb84407e5a3217db6e982e442d03429d6edb2e8ee58c4c8f0",
     "Makefile": "02ac71587b267b5649cd06ea648a9ff96653d7f5da69e86801f940be3b8aff39",
     "lychee.toml": "818873f2655a41cb7251f4fe8883261fd7cd2bb3a1b253d3c6431540fb6d87de",
     "scripts/sdd-check.sh": "934508ec324de784e6b98d7c11acdb85294486a100bbcbc99726da01ad29f3e1",
+    "scripts/sdd-checkpoint.sh": "17bdeb0c743af7ae961a5846e50a6dbc66d4d6e3f2f7c1151c291fb007e02d81",
     "scripts/sdd-ci.sh": "b035294bf287e3ea0774530aecb371440be54f612f2afc1fd7bf9ce8b82acc7c",
     "scripts/sdd-epic.sh": "ae203e9191b413bc5112f2d264b6e6b126c66fd834123bbd931e8e6d08007005",
     "scripts/sdd-mark.sh": "a3972e2158b24eeed5c49e35afe05e382cd1a47ecca2ddac713ef2256867f1ea",
     "scripts/sdd-phase-status.sh": "1810db20f22817964ae7ba125f01c5232285cff887eddc8664b98441b2dce666",
     "scripts/sdd-release-check.sh": "9680beecd8202630e5eb14dd5a380df8cb9e09eca3858ac13d47c61f21212460",
-    "scripts/sdd-sync.sh": "1a22e45417642b6a9ade14f5c5581eb5c98a6f958373faf432469b3cdb920430",
-    "specs/ANALYSIS.md": "8ff074f9a730d9f4fb33b5c09f4e52f029aa631ca294455e4d08f2f74fc1c465",
-    "specs/README.md": "76ec4f75449bc652b5447d0400c667877cdd37f39ab87d7868519d5d3ce18a79",
-    "specs/ROADMAP.md": "5f4e489907ec0c969eefac0797c424303898a528ad9b2a93e9fd2761828c4078",
-    "specs/constitution.md": "9be842ee0b09857e6072c1217256d125f12d43cbf57ea03e23282dc0206140cd"
+    "scripts/sdd-sync.sh": "1a22e45417642b6a9ade14f5c5581eb5c98a6f958373faf432469b3cdb920430"
   }
 }
