@@ -24,6 +24,7 @@ O estado do trabalho vive no GitHub, e não na conversa. Abra o ticket e o PR as
 ```text
 make ci     # a mesma verificação do CI (rode antes de todo push)
 make docs   # markdownlint (os links são verificados no CI)
+make linkcheck  # o próprio linkcheck verifica a documentação deste repositório
 make sdd-check  # cada AC de spec In Progress/Done citado num teste ("NNN AC-n")
 ```
 
@@ -37,14 +38,25 @@ Numa sessão na web, o hook `.claude/hooks/session-start.sh` instala as dependê
 - **PR:** começa com `Closes #N · Épico #M · Spec NNN` e segue o template.
 - **Arquivos de status** (status das specs, checkboxes do ROADMAP, CHANGELOG) só mudam no PR de fechamento da fase.
 - **Merge, tag e release** são do dono, salvo delegação explícita para uma rodada.
+- **Comandos do README:** um bloco ```` ```bash ```` com `<!-- doc-commands -->` na linha anterior roda no CI (`sh scripts/doc-commands.sh`); marque os exemplos que devem continuar funcionando.
 
 ## Armadilhas já conhecidas
 
-- **Toolchain baixada pelo `GOTOOLCHAIN`** não traz o `covdata`: `go test -cover` falha em pacotes sem teste. Use uma instalação completa do Go (o CI usa `setup-go`).
+- **Toolchain baixada pelo `GOTOOLCHAIN`** não traz o `covdata`: `go test -cover` falha em pacotes sem teste. O hook de sessão compila o que falta; fora dele, use uma instalação completa do Go (o CI usa `setup-go`).
 
 ## Economia de uso
 
-- Leia trechos (`sed -n 'a,bp'`, `grep -n`) em vez de arquivos inteiros, e não releia o que já leu nesta sessão.
-- Para conferir CI, peça só o resumo das conclusões dos checks. Para investigar uma falha, leia o fim do log do job que falhou.
-- Junte a validação num comando só (`make ci`) em vez de rodar etapas avulsas.
-- Detalhes vão nos PRs e nas issues; no chat, só o resumo e o próximo passo.
+Cada regra abaixo reduziu o gasto de sessões reais; aplique desde a primeira mensagem.
+
+- Leia trechos (`sed -n 'a,bp'`, `grep -n`) em vez de arquivos inteiros, e não releia o que já leu, nem depois de editar.
+- Junte leituras e checagens independentes num comando só.
+- Saída longa vai para um arquivo; mostre só o código de saída e o fim: `make ci > /tmp/ci.log 2>&1; echo "exit $?"; tail -n 3 /tmp/ci.log`.
+- Valide tudo com `make ci`, uma vez, antes do push.
+- CI dos PRs: `sh scripts/sdd-ci.sh '#PR'` (uma linha por check e só o fim do log das falhas). Não assine os eventos do PR; se a sessão assinar sozinha, cancele.
+- Edição mecânica por script que falha se o trecho não existir (ex.: `assert old in s` antes do `replace` em Python), sem reler o arquivo.
+- Checagem de mutação sem reler: copie o arquivo, quebre, rode o teste, restaure com `cp`.
+- Confira ferramentas e rede antes de começar (o proxy pode bloquear downloads); tente o gerenciador de pacotes do sistema.
+- Nas ferramentas do GitHub, peça só os campos necessários (`fields`, `minimal_output`, `perPage`).
+- Branch de PR já mergeado: recomece da `main` num comando (`git fetch origin main && git checkout -B <branch> origin/main`).
+- Subagentes só para buscas amplas de leitura, num modelo pequeno.
+- "Estado da fase" só nos marcos e em poucas linhas; no chat, três linhas (feito, falta, bloqueia); detalhes nos PRs e nas issues.
