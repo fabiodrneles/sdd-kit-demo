@@ -23,6 +23,9 @@ linkcheck
 # Só alguns caminhos
 linkcheck docs README.md
 
+# Também as URLs http(s), com até 5 s por requisição
+linkcheck --external --timeout 5s
+
 # Versão
 linkcheck --version
 ```
@@ -45,7 +48,7 @@ README.md:40: âncora não encontrada: #instalacao
 - Links inline, imagens e definições de referência, fora de blocos de código.
 - Destinos relativos ao arquivo, e `/caminho` a partir da raiz.
 - Âncoras com os slugs do GitHub: `## Instalação` vira `#instalação`, e títulos repetidos ganham `-1`, `-2`.
-- URLs externas (`https://...`) ficam de fora por padrão; a opção `--external` chega na `v0.2.0`.
+- URLs externas (`https://...`) ficam de fora por padrão. Com `--external`, cada URL é pedida uma vez (HEAD, ou GET se o servidor recusar HEAD), com até 8 requisições ao mesmo tempo: 2xx e 3xx passam, 4xx e 5xx saem como `HTTP 404`, e falhas como `erro de rede`.
 
 ## Como este projeto foi feito
 

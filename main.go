@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/fabiodrneles/sdd-kit-demo/internal/check"
 )
@@ -28,6 +29,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 	fs := flag.NewFlagSet("linkcheck", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	showVersion := fs.Bool("version", false, "imprime a versão e sai")
+	external := fs.Bool("external", false, "verifica também as URLs http(s) (spec 002)")
+	timeout := fs.Duration("timeout", 10*time.Second, "tempo máximo de cada requisição com --external")
 	fs.Usage = func() {
 		_, _ = fmt.Fprintln(stderr, "uso: linkcheck [flags] [CAMINHO...]")
 		_, _ = fmt.Fprintln(stderr, "Verifica links locais e âncoras dos arquivos .md (padrão: diretório atual).")
@@ -56,6 +59,15 @@ func run(args []string, stdout, stderr io.Writer) int {
 	if err != nil {
 		_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
 		return exitUsage
+	}
+	if *external {
+		ext, err := check.External(files, check.ExternalOptions{Timeout: *timeout})
+		if err != nil {
+			_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
+			return exitUsage
+		}
+		problems = append(problems, ext...)
+		check.Sort(problems)
 	}
 	for _, p := range problems {
 		_, _ = fmt.Fprintln(stdout, p)
