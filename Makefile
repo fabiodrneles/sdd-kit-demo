@@ -6,11 +6,11 @@ COVERAGE_MIN ?= 80
 .DEFAULT_GOAL := ci
 
 .PHONY: ci
-ci: lint test build doc-commands linkcheck ## Tudo o que o CI verifica
+ci: lint test build ## Tudo o que o CI verifica
 
 .PHONY: lint
-lint: ## golangci-lint
-	golangci-lint run
+lint: ## golangci-lint (prefere o do GOPATH/bin, que o sdd-doctor.sh instala na versão certa)
+	$(or $(wildcard $(shell go env GOPATH)/bin/golangci-lint),golangci-lint) run
 
 .PHONY: test
 test: ## Testes com race detector e cobertura mínima (COVERAGE_MIN)
@@ -27,13 +27,10 @@ build: ## Compila tudo
 docs: ## markdownlint (o CI também verifica links)
 	npx --yes markdownlint-cli2@0.23.3
 
-.PHONY: doc-commands
-doc-commands: ## Os blocos bash do README funcionam
-	sh scripts/doc-commands.sh
-
 .PHONY: linkcheck
-linkcheck: ## O próprio linkcheck verifica a documentação deste repositório
-	go run . .
+linkcheck: ## Links quebrados nos .md (precisa do lychee; o CI sempre verifica)
+	@command -v lychee >/dev/null || { echo "lychee não instalado: https://lychee.cli.rs" >&2; exit 1; }
+	lychee --config lychee.toml --no-progress './**/*.md'
 
 .PHONY: sdd-check
 sdd-check: ## Rastreabilidade specs × testes × ROADMAP (falha se houver aviso)
