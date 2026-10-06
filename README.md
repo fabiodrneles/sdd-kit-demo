@@ -26,6 +26,9 @@ linkcheck docs README.md
 # Também as URLs http(s), com até 5 s por requisição
 linkcheck --external --timeout 5s
 
+# Saída em JSON (lista de objetos com file, line, target e reason)
+linkcheck --format json
+
 # Versão
 linkcheck --version
 ```

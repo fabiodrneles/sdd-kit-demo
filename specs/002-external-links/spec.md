@@ -28,3 +28,4 @@
 
 - ADDED FR-1 — `--external` e `--timeout`: URLs http(s) verificadas com HEAD (GET se recusado), uma vez cada, até 8 em paralelo (T4, #14).
 - ADDED FR-2 — 2xx e 3xx passam; 4xx/5xx viram `HTTP <status>` e falhas de rede, `erro de rede` (T4, #14).
+- ADDED FR-3 — `--format json` imprime a lista de problemas com `file`, `line`, `target` e `reason` (`[]` sem problemas); outro valor sai com 2 (T5, #15).
