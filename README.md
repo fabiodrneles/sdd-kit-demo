@@ -67,6 +67,23 @@ README.md:40: âncora não encontrada: #instalacao
 - Âncoras com os slugs do GitHub: `## Instalação` vira `#instalação`, e títulos repetidos ganham `-1`, `-2`.
 - URLs externas (`https://...`) ficam de fora por padrão. Com `--external`, cada URL é pedida uma vez (HEAD, ou GET se o servidor recusar HEAD), com até 8 requisições ao mesmo tempo: 2xx e 3xx passam, 4xx e 5xx saem como `HTTP 404`, e falhas como `erro de rede`.
 
+### No GitHub Actions
+
+A Action deste repositório compila o `linkcheck` da versão escolhida em `uses:` e o roda; o job falha se houver link quebrado:
+
+```yaml
+- uses: actions/checkout@v7
+- uses: fabiodrneles/sdd-kit-demo@v1.0.0
+  with:
+    paths: docs README.md   # padrão: "."
+    external: "true"        # também as URLs http(s)
+    timeout: 5s
+    format: text            # ou json
+    working-directory: .    # onde roda e lê o .linkcheck.yml
+```
+
+Todas as entradas são opcionais.
+
 ## Como este projeto foi feito
 
 1. [`specs/ANALYSIS.md`](specs/ANALYSIS.md): decisões iniciais do dono (D1–D4).
