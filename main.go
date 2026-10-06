@@ -2,6 +2,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -31,6 +32,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	showVersion := fs.Bool("version", false, "imprime a versão e sai")
 	external := fs.Bool("external", false, "verifica também as URLs http(s) (spec 002)")
 	timeout := fs.Duration("timeout", 10*time.Second, "tempo máximo de cada requisição com --external")
+	format := fs.String("format", "text", "formato da saída: text ou json (spec 002)")
 	fs.Usage = func() {
 		_, _ = fmt.Fprintln(stderr, "uso: linkcheck [flags] [CAMINHO...]")
 		_, _ = fmt.Fprintln(stderr, "Verifica links locais e âncoras dos arquivos .md (padrão: diretório atual).")
@@ -40,6 +42,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 		if err == flag.ErrHelp {
 			return exitOK
 		}
+		return exitUsage
+	}
+	if *format != "text" && *format != "json" {
+		_, _ = fmt.Fprintf(stderr, "linkcheck: --format inválido: %q (use text ou json)\n", *format)
 		return exitUsage
 	}
 	if *showVersion {
@@ -69,8 +75,20 @@ func run(args []string, stdout, stderr io.Writer) int {
 		problems = append(problems, ext...)
 		check.Sort(problems)
 	}
-	for _, p := range problems {
-		_, _ = fmt.Fprintln(stdout, p)
+	if *format == "json" {
+		if problems == nil {
+			problems = []check.Problem{}
+		}
+		enc := json.NewEncoder(stdout)
+		enc.SetIndent("", "  ")
+		if err := enc.Encode(problems); err != nil {
+			_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
+			return exitUsage
+		}
+	} else {
+		for _, p := range problems {
+			_, _ = fmt.Fprintln(stdout, p)
+		}
 	}
 	if len(problems) > 0 {
 		return exitBroken

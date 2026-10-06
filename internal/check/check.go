@@ -16,10 +16,10 @@ import (
 
 // Problem is a broken link.
 type Problem struct {
-	File   string
-	Line   int
-	Reason string
-	Target string
+	File   string `json:"file"`
+	Line   int    `json:"line"`
+	Reason string `json:"reason"`
+	Target string `json:"target"`
 }
 
 func (p Problem) String() string {
