@@ -4,6 +4,16 @@ Todas as mudanças relevantes deste projeto. Formato [Keep a Changelog](https://
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-06
+
+Fase 2 do [ROADMAP](specs/ROADMAP.md): links externos e integração (spec 002).
+
+### Adicionado
+
+- **`--external`:** verifica também as URLs http(s), com HEAD (ou GET, se o servidor recusar HEAD), uma vez por URL, até 8 em paralelo e com `--timeout` configurável. 2xx e 3xx passam; 4xx/5xx saem como `HTTP <status>` e falhas como `erro de rede` (002 FR-1, FR-2, #18).
+- **`--format json`:** a lista de problemas em JSON, com `file`, `line`, `target` e `reason` (`[]` sem problemas), para outras ferramentas consumirem (002 FR-3, #21).
+- **`.linkcheck.yml`:** `ignore` lista padrões de destino a ignorar, locais ou externos, e com `--external` uma URL ignorada nem é pedida. Uma chave desconhecida sai com 2, para um erro de digitação não desligar a lista (002 FR-4, #23).
+
 ## [0.1.0] - 2026-10-02
 
 ### Adicionado

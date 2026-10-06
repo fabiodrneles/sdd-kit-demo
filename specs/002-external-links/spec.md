@@ -1,7 +1,7 @@
 # 002 — URLs externas e saída JSON
 
 - **Prioridade:** P1
-- **Status:** Approved — decisões respondidas pelo dono em 2026-10-02
+- **Status:** Done — entregue na `v0.2.0`
 - **Código afetado:** `internal/`
 
 ## Requisitos funcionais
@@ -24,7 +24,7 @@
 
 ## Mudanças
 
-### Não lançado
+### v0.2.0
 
 - ADDED FR-1 — `--external` e `--timeout`: URLs http(s) verificadas com HEAD (GET se recusado), uma vez cada, até 8 em paralelo (T4, #14).
 - ADDED FR-2 — 2xx e 3xx passam; 4xx/5xx viram `HTTP <status>` e falhas de rede, `erro de rede` (T4, #14).

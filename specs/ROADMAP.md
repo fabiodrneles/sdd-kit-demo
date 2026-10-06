@@ -14,9 +14,9 @@ Cada tarefa referencia a spec e os critérios de aceite que ela fecha. Ordem sug
 
 ## Fase 2 — Confiável (P1) → `v0.2.0`
 
-- [ ] **T4** `--external` com servidor de teste local — 002 FR-1, FR-2, AC-1, AC-2
-- [ ] **T5** `--format json` — 002 FR-3, AC-3
-- [ ] **T6** `.linkcheck.yml` com exclusões — 002 FR-4, AC-4
+- [x] **T4** `--external` com servidor de teste local — 002 FR-1, FR-2, AC-1, AC-2
+- [x] **T5** `--format json` — 002 FR-3, AC-3
+- [x] **T6** `.linkcheck.yml` com exclusões — 002 FR-4, AC-4
 
 ## Fase 3 — Profissional (P2) → `v1.0.0`
 
