@@ -1,6 +1,6 @@
 {
   "kit": "sdd-kit",
-  "version": "v1.8.0",
+  "version": "v1.9.0",
   "lang": "go",
   "project": "sdd-kit-demo",
   "owner": "fabiodrneles",
@@ -25,7 +25,7 @@
     ".github/workflows/sdd-update-prs.yml": "14ec1273a278d5bd25df43c7eca44eb811c89a0a4db782150e9a7564331d5d3a",
     ".markdownlint-cli2.yaml": "17d387a31b80b899acd9136c2dfc448aaab3a281a130dd4b4dcf3f73afa95e01",
     "AGENTS.md": "c8a1cf614aa6a04330e6fa1fdae08ab988783f7251840c72ead92dd622898dd4",
-    "CLAUDE.md": "92c419c164195f1030e5b3e04a32bcc238a7437e30c627266f62627803b7513e",
+    "CLAUDE.md": "d99ef2ef4a927eae4cfc0a603dd170561f7f2b4fe20f2d19174f4a5e7ff2fd5d",
     "CONTRIBUTING.md": "61903db008fc699bb84407e5a3217db6e982e442d03429d6edb2e8ee58c4c8f0",
     "Makefile": "0c38af6f20504e1d77c4ebb36cab8f493a9b283a7007e0ef24f834c611ce9039",
     "lychee.toml": "818873f2655a41cb7251f4fe8883261fd7cd2bb3a1b253d3c6431540fb6d87de",
@@ -42,12 +42,12 @@
     "scripts/sdd-on-phase-done.sh": "69b9da5bcfd380809f4ae8b375458c4b5ba20dd189d48de0489443bc160d099b",
     "scripts/sdd-on-release-merge.sh": "33efcba1130f1eb858d298430862ec98e7dd3495018fa4f431904e8a6dbe3cc3",
     "scripts/sdd-phase-status.sh": "1810db20f22817964ae7ba125f01c5232285cff887eddc8664b98441b2dce666",
-    "scripts/sdd-pr.sh": "6f7b69124cf643f4182e1841499b6a11a0f455cec7529b027d61470d27bb0c14",
+    "scripts/sdd-pr.sh": "613bde9ea1aa8056b21fbdb747789d7ee0fe20ce7d6453e46ea94d3ab23d0c8b",
     "scripts/sdd-release-check.sh": "9680beecd8202630e5eb14dd5a380df8cb9e09eca3858ac13d47c61f21212460",
     "scripts/sdd-release.sh": "06976b8b585619eb716db1c784578984bdd778b0b6e2072b97f1ebc5e4693eed",
     "scripts/sdd-resume.sh": "a87620a7fcc9f2b44da840bb10224f94c82f9ef308a3909cde8699f93333ac3d",
     "scripts/sdd-sync.sh": "f9777e84873c156c7e482dbf9bce9d53a27b3ae55353169acfe94fa9e9712d93",
     "scripts/sdd-update-prs.sh": "80b0b8a27c1ad74cbb6200a4a7dea546eb2529fa8c6257b457f5b1f5c72df038",
-    "scripts/sdd-wait.sh": "77515cb17d785041bc5b1a4e9d29acaf5e672465b7c40fe8d31775e928429b85"
+    "scripts/sdd-wait.sh": "d052367d1c44e477938d0a8141b1d7b12e97b732dc73f6c0c41b1cd74108aa96"
   }
 }
