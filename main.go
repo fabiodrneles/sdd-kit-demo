@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/fabiodrneles/sdd-kit-demo/internal/check"
+	"github.com/fabiodrneles/sdd-kit-demo/internal/config"
 )
 
 // Set by GoReleaser through -ldflags "-X main.version=...".
@@ -61,13 +62,18 @@ func run(args []string, stdout, stderr io.Writer) int {
 		_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
 		return exitUsage
 	}
+	cfg, err := config.Load(config.File)
+	if err != nil {
+		_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
+		return exitUsage
+	}
 	problems, err := check.Local(files)
 	if err != nil {
 		_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
 		return exitUsage
 	}
 	if *external {
-		ext, err := check.External(files, check.ExternalOptions{Timeout: *timeout})
+		ext, err := check.External(files, check.ExternalOptions{Timeout: *timeout, Skip: cfg.Ignored})
 		if err != nil {
 			_, _ = fmt.Fprintln(stderr, "linkcheck:", err)
 			return exitUsage
@@ -75,6 +81,13 @@ func run(args []string, stdout, stderr io.Writer) int {
 		problems = append(problems, ext...)
 		check.Sort(problems)
 	}
+	kept := problems[:0]
+	for _, p := range problems {
+		if !cfg.Ignored(p.Target) {
+			kept = append(kept, p)
+		}
+	}
+	problems = kept
 	if *format == "json" {
 		if problems == nil {
 			problems = []check.Problem{}
