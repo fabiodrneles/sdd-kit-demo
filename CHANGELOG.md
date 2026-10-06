@@ -6,10 +6,12 @@ Todas as mudanças relevantes deste projeto. Formato [Keep a Changelog](https://
 
 ## [1.0.0] - 2026-10-06
 
+Fase 3 do [ROADMAP](specs/ROADMAP.md): distribuição (spec 003).
+
 ### Adicionado
 
-- publish binaries with GoReleaser after the release tag (#28)
-- add a GitHub Action that runs linkcheck (#29)
+- **Binários prontos:** cada tag publica o `linkcheck` para Linux, macOS e Windows (amd64 e arm64) com `checksums.txt`, pelo GoReleaser, depois de `make ci` verde. A versão é calculada pelo go-release-manager e o *Release check* ensaia a release em todo PR (003 FR-1, FR-2, #28).
+- **GitHub Action:** `uses: fabiodrneles/sdd-kit-demo@v1.0.0` roda o `linkcheck` no repositório, com as entradas `paths`, `external`, `timeout` e `format`; o job falha se houver link quebrado (003 FR-4, #29).
 
 ## [0.2.0] - 2026-10-06
 

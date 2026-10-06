@@ -1,7 +1,7 @@
 # 003 — Distribuição
 
 - **Prioridade:** P2
-- **Status:** Approved — decisões respondidas pelo dono em 2026-10-02
+- **Status:** Done — entregue na `v1.0.0`
 - **Código afetado:** `.goreleaser.yml`, `.github/workflows/`, `action.yml`
 
 ## Requisitos funcionais

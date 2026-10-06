@@ -20,5 +20,5 @@ Cada tarefa referencia a spec e os critérios de aceite que ela fecha. Ordem sug
 
 ## Fase 3 — Profissional (P2) → `v1.0.0`
 
-- [ ] **T7** GoReleaser e versão pelo go-release-manager — 003 FR-1 a FR-3, AC-1
-- [ ] **T8** GitHub Action — 003 FR-4, AC-2
+- [x] **T7** GoReleaser e versão pelo go-release-manager — 003 FR-1 a FR-3, AC-1
+- [x] **T8** GitHub Action — 003 FR-4, AC-2

@@ -30,6 +30,6 @@ Convenções: `MUST`/`SHOULD`/`MAY` seguem a RFC 2119. Prioridades: **P0** (bloq
 |---|---|---|---|
 | 001 | [Links locais e âncoras](001-local-links/spec.md) | P0 | Done |
 | 002 | [URLs externas e saída JSON](002-external-links/spec.md) | P1 | Done |
-| 003 | [Distribuição](003-distribution/spec.md) | P2 | Approved |
+| 003 | [Distribuição](003-distribution/spec.md) | P2 | Done |
 
 Status possíveis: `Draft` → `Approved` → `In Progress` → `Done`.
