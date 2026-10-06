@@ -1,0 +1,87 @@
+# Publica os binários e os checksums da tag (spec 003 FR-1), depois de make ci verde.
+# A tag vem do Release tag (go-release-manager, FR-2): criada com o GITHUB_TOKEN, ela
+# não dispara "push: tags", por isso este workflow também roda quando o Release tag
+# termina (workflow_run). Tag criada à mão dispara pelo push; dispatch republica uma tag.
+name: Release
+
+on:
+  workflow_run:
+    workflows: [Release tag]
+    types: [completed]
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag vX.Y.Z a publicar
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: tag a publicar
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - id: tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          INPUT: ${{ inputs.tag }}
+        run: |
+          case "$EVENT" in
+            push) tag="$GITHUB_REF_NAME" ;;
+            workflow_dispatch) tag="$INPUT" ;;
+            *) tag="$(git tag --list 'v*' --sort=-v:refname | head -n 1)" ;;
+          esac
+          # Release que já tem binários não é publicada de novo (rerun do Release tag
+          # sem tag nova, ou o push e o workflow_run da mesma tag).
+          if [ -z "$tag" ]; then
+            echo "nenhuma tag v*"
+          elif [ "$EVENT" != workflow_dispatch ] && [ "$(gh release view "$tag" --json assets --jq '.assets | length' 2> /dev/null || echo 0)" -gt 0 ]; then
+            echo "$tag já tem binários"; tag=""
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "### Tag a publicar: ${tag:-nenhuma}" >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    name: make ci e GoReleaser
+    needs: tag
+    if: needs.tag.outputs.tag != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
+          fetch-depth: 0
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Versão do golangci-lint (Makefile)
+        id: lint
+        run: echo "version=$(sed -n 's/^GOLANGCI_LINT_VERSION *:= *//p' Makefile)" >> "$GITHUB_OUTPUT"
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: ${{ steps.lint.outputs.version }}
+          install-only: true
+      - run: make ci
+      - uses: goreleaser/goreleaser-action@v7
+        with:
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GORELEASER_CURRENT_TAG: ${{ needs.tag.outputs.tag }}

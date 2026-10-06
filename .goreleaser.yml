@@ -1,0 +1,50 @@
+# Binários do linkcheck para Linux, macOS e Windows com checksums (spec 003 FR-1).
+# A versão vem da tag criada pelo go-release-manager (FR-2) e entra no binário
+# por -ldflags (main.version); o CI roda "goreleaser check" (003 AC-1).
+version: 2
+
+project_name: linkcheck
+
+before:
+  hooks:
+    - go mod tidy -diff
+
+builds:
+  - id: linkcheck
+    binary: linkcheck
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files: [LICENSE, README.md]
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github
+  groups:
+    - title: Novidades
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Correções
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Outros
+      order: 999
+  filters:
+    exclude: ['^docs:', '^test:', '^chore:', '^ci:', 'Merge pull request']
+
+release:
+  # O Release tag já cria a release com as notas; aqui só entram os binários.
+  mode: keep-existing

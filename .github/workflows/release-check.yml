@@ -1,0 +1,43 @@
+# Ensaio da release em todo PR e push na main (spec 003 AC-1): "goreleaser check"
+# valida o .goreleaser.yml e o snapshot compila os binários de todos os alvos sem
+# publicar nada; o sdd-release-check.sh confere os artefatos.
+name: Release check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  goreleaser:
+    name: goreleaser check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - uses: goreleaser/goreleaser-action@v7
+        with:
+          version: "~> v2"
+          args: check
+      - uses: goreleaser/goreleaser-action@v7
+        with:
+          version: "~> v2"
+          args: release --snapshot --clean --skip=publish
+      - name: Artefatos (6 alvos e checksums)
+        run: |
+          n="$(find dist -maxdepth 1 \( -name '*.tar.gz' -o -name '*.zip' \) | wc -l)"
+          echo "arquivos: $n"; [ "$n" -eq 6 ]
+          (cd dist && sha256sum -c checksums.txt)
+          ./dist/linkcheck_linux_amd64_v1/linkcheck --version

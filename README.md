@@ -14,6 +14,8 @@ go install github.com/fabiodrneles/sdd-kit-demo@latest
 
 O binário instalado se chama `sdd-kit-demo`; os exemplos abaixo usam o nome `linkcheck`, como no `go build -o linkcheck`.
 
+Ou baixe o binário pronto (Linux, macOS e Windows, amd64 e arm64) da [última release](https://github.com/fabiodrneles/sdd-kit-demo/releases/latest) e confira com o `checksums.txt`.
+
 ## Uso
 
 ```bash
