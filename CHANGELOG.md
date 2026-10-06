@@ -4,6 +4,14 @@ Todas as mudanças relevantes deste projeto. Formato [Keep a Changelog](https://
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-06
+
+### Adicionado
+
+- check external links with --external (#18)
+- add --format json output (#21)
+- ignore targets listed in .linkcheck.yml (#23)
+
 ## [0.1.0] - 2026-10-02
 
 ### Adicionado
