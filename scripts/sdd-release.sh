@@ -91,7 +91,17 @@ if [ "$tagmode" -eq 1 ]; then
     || die "a origin/main não tem '## [$ver]' no CHANGELOG: o PR de fechamento já foi mesclado?"
   sha="$(git rev-parse origin/main)"
   wf=".github/workflows/release-tag.yml"
-  if [ -f scripts/sdd-release-check.sh ]; then
+  if [ "${SDD_RELEASE_PRE:-}" = ci ]; then
+    # No motor (runner sem as ferramentas do projeto): a verificação é o CI da main
+    # verde exatamente no commit que vai receber a tag.
+    if [ "$dry" -eq 1 ]; then
+      echo "[dry-run] sh $here/sdd-ci.sh $sha (CI da main antes da tag)"
+    else
+      echo "sdd-release: esperando o CI da main em $(printf '%s' "$sha" | cut -c1-7) antes da tag"
+      sh "$here/sdd-ci.sh" --repo "$repo" --timeout "${SDD_RELEASE_CI_TIMEOUT:-1800}" "$sha" \
+        || { echo "sdd-release: o CI da main não está verde em $(printf '%s' "$sha" | cut -c1-7); nada foi criado" >&2; exit 1; }
+    fi
+  elif [ -f scripts/sdd-release-check.sh ]; then
     if [ "$dry" -eq 1 ]; then
       echo "[dry-run] sh scripts/sdd-release-check.sh pre $tag"
     else
@@ -138,9 +148,21 @@ if grep -q "^## \[$ver\]" "$tmp/CHANGELOG.md"; then die "o CHANGELOG já tem a v
 
 # PRs mesclados na main depois da data do commit da última tag (UTC, comparável).
 since="$(TZ=UTC git log -1 --date=format-local:%Y-%m-%dT%H:%M:%SZ --format=%cd "$last^{commit}")"
-gh api "repos/$repo/pulls?state=closed&base=main&sort=updated&direction=desc&per_page=100" --paginate \
-  --jq ".[] | select(.merged_at != null and .merged_at > \"$since\") | \"\(.number)\t\(.title)\"" > "$tmp/prs" \
-  || die "falha ao listar os PRs de $repo"
+# Paginação explícita (page=N): o --paginate do gh segue links repositories/{id}, que
+# alguns proxies recusam. A lista vem pela atualização mais recente, então para na
+# primeira página que já alcança PRs atualizados antes da última tag.
+: > "$tmp/prs"
+page=1
+while :; do
+  gh api "repos/$repo/pulls?state=closed&base=main&sort=updated&direction=desc&per_page=100&page=$page" \
+    --jq "(.[] | select(.merged_at != null and .merged_at > \"$since\") | \"PR\t\(.number)\t\(.title)\"), \"N\t\(length)\", \"OLD\t\([.[] | select(.updated_at < \"$since\")] | length)\"" \
+    > "$tmp/page" || die "falha ao listar os PRs de $repo"
+  sed -n 's/^PR\t//p' "$tmp/page" >> "$tmp/prs"
+  n="$(sed -n 's/^N\t//p' "$tmp/page")"
+  stale="$(sed -n 's/^OLD\t//p' "$tmp/page")"
+  if [ "${n:-0}" -lt 100 ] || [ "${stale:-0}" -gt 0 ] || [ "$page" -ge 50 ]; then break; fi
+  page=$((page + 1))
+done
 : > "$tmp/add"; : > "$tmp/fix"; : > "$tmp/alt"
 sort -n "$tmp/prs" | while IFS="$(printf '\t')" read -r num title; do
   type="$(printf '%s\n' "$title" | sed -n -E 's/^([a-z]+)(\([^)]*\))?!?: .*/\1/p')"

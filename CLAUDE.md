@@ -4,8 +4,11 @@ Guia rápido para agentes (Claude Code) trabalharem no sdd-kit-demo sem redescob
 
 ## Retomar o trabalho (sessão nova ou contexto perdido)
 
-1. Rode `sh scripts/sdd-resume.sh` (o hook de início de sessão já o roda): mostra o **checkpoint** do épico aberto, entra na branch dele (árvore limpa), lista os **PRs abertos** com o CI de cada um e as **issues abertas** do épico. Continue do "Próximo" do checkpoint, sem esperar instrução. Sem checkpoint, leia o comentário "Estado da fase" mais recente do épico.
-2. Continue do próximo passo registrado. Não refaça análise que já está em specs, issues ou PRs.
+Uma regra só: **faça o "Próximo" que o `sh scripts/sdd-resume.sh` imprime** (o hook de início de sessão já o roda), sem esperar instrução e sem escolher outra coisa. "Continue" quer dizer exatamente isso.
+
+- O "Próximo" vem do checkpoint do épico aberto (o motor o atualiza a cada merge) ou, sem épico, da fase já aprovada no ROADMAP.
+- Se o "Próximo" é "perguntar ao dono", pergunte e pare: não escreva spec, não abra épico nem fase por conta própria.
+- Não refaça análise que já está em specs, issues ou PRs.
 
 O estado do trabalho vive no GitHub, e não na conversa. Abra o ticket e o PR assim que a tarefa começar e terminar, e atualize o comentário de estado do épico a cada marco.
 
@@ -30,7 +33,7 @@ Numa sessão na web, o hook `.claude/hooks/session-start.sh` instala as dependê
 
 ## Convenções
 
-- **Idioma:** specs, issues, PRs e documentação em português; commits e código (identificadores) em inglês.
+- **Idioma:** a conversa segue o idioma em que o dono escreve; uma mensagem curta como "continue" não define idioma: siga o das mensagens anteriores do dono ou, numa sessão nova, o deste arquivo; specs, issues, PRs e documentação em português; commits e código (identificadores) em inglês.
 - **Commits:** Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `ci:`, `chore:`; `!` para mudança incompatível).
 - **Branch:** uma por ticket, `<tipo>/<nº-da-issue>-<descrição>`, a partir da `main`.
 - **PR:** começa com `Closes #N · Épico #M · Spec NNN` e segue o template.
