@@ -1,0 +1,46 @@
+# Testa a Action local (action.yml) num diretório com um link quebrado e num sem
+# (spec 003 AC-2). Os arquivos de teste nascem no job, para o lint e a
+# verificação de links do repositório não os verem.
+name: Action test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: action-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  action:
+    name: linkcheck action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Diretórios de teste
+        run: |
+          mkdir -p "$RUNNER_TEMP/ok" "$RUNNER_TEMP/broken"
+          printf '# Ok\n\n[eu](README.md) e [seção](#ok)\n' > "$RUNNER_TEMP/ok/README.md"
+          printf '# Quebrado\n\n[falta](nao-existe.md)\n' > "$RUNNER_TEMP/broken/README.md"
+      - name: Sem link quebrado
+        uses: ./
+        with:
+          working-directory: ${{ runner.temp }}/ok
+      - name: Com link quebrado (deve falhar)
+        id: broken
+        continue-on-error: true
+        uses: ./
+        with:
+          working-directory: ${{ runner.temp }}/broken
+          format: json
+      - name: 003 AC-2 — o passo com link quebrado falhou
+        env:
+          OUTCOME: ${{ steps.broken.outcome }}
+        run: |
+          echo "resultado: $OUTCOME"
+          [ "$OUTCOME" = failure ]

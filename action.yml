@@ -1,0 +1,57 @@
+# GitHub Action do linkcheck (spec 003 FR-4): compila o linkcheck da versão da
+# própria Action (a ref de "uses:") e o roda; o job falha se houver link quebrado.
+# Teste: .github/workflows/action-test.yml (003 AC-2).
+name: linkcheck
+description: Find broken links (missing files and anchors, optionally URLs) in Markdown files.
+author: fabiodrneles
+branding:
+  icon: link
+  color: blue
+
+inputs:
+  paths:
+    description: "Files or directories to check, separated by spaces (default: the working directory)."
+    required: false
+    default: "."
+  external:
+    description: "Also check http(s) URLs ('true' or 'false')."
+    required: false
+    default: "false"
+  timeout:
+    description: "Timeout per external request (e.g. '5s'); empty uses the linkcheck default."
+    required: false
+    default: ""
+  format:
+    description: "Output format ('text' or 'json')."
+    required: false
+    default: text
+  working-directory:
+    description: "Directory where linkcheck runs (and where .linkcheck.yml is read)."
+    required: false
+    default: "."
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-go@v7
+      with:
+        go-version-file: ${{ github.action_path }}/go.mod
+        cache: false
+    - name: Build linkcheck
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: go build -trimpath -o "$RUNNER_TEMP/linkcheck" .
+    - name: Run linkcheck
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        LC_PATHS: ${{ inputs.paths }}
+        LC_EXTERNAL: ${{ inputs.external }}
+        LC_TIMEOUT: ${{ inputs.timeout }}
+        LC_FORMAT: ${{ inputs.format }}
+      run: |
+        set -- --format "$LC_FORMAT"
+        if [ "$LC_EXTERNAL" = true ]; then set -- "$@" --external; fi
+        if [ -n "$LC_TIMEOUT" ]; then set -- "$@" --timeout "$LC_TIMEOUT"; fi
+        # shellcheck disable=SC2086 # paths separados por espaço, de propósito
+        "$RUNNER_TEMP/linkcheck" "$@" $LC_PATHS
