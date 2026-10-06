@@ -33,6 +33,18 @@ linkcheck --format json
 linkcheck --version
 ```
 
+### Ignorar destinos (`.linkcheck.yml`)
+
+Um `.linkcheck.yml` no diretório onde o `linkcheck` roda lista padrões de destino a ignorar, links locais ou URLs. Com `--external`, uma URL ignorada nem é pedida. O `*` casa qualquer trecho, inclusive `/`:
+
+```yaml
+ignore:
+  - "https://exemplo.invalid/*"
+  - "docs/rascunho.md"
+```
+
+A lista também pode vir numa linha só (`ignore: ["a", "b"]`). Uma chave diferente de `ignore` é erro e faz o `linkcheck` sair com 2, para um erro de digitação não desligar a lista sem aviso.
+
 Cada problema sai numa linha no formato `arquivo:linha: motivo: destino`, que os editores reconhecem como link:
 
 ```text

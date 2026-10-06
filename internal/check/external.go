@@ -17,9 +17,10 @@ const ReasonNetwork = "erro de rede"
 
 // ExternalOptions configures External (spec 002 FR-1).
 type ExternalOptions struct {
-	Timeout     time.Duration // per request
-	Concurrency int           // simultaneous requests
-	Client      *http.Client  // nil: a client that does not follow redirects
+	Timeout     time.Duration            // per request
+	Concurrency int                      // simultaneous requests
+	Client      *http.Client             // nil: a client that does not follow redirects
+	Skip        func(target string) bool // true: the URL is not requested (spec 002 FR-4)
 }
 
 // External checks the http(s) links of each file: 2xx and 3xx pass, 4xx, 5xx
@@ -51,6 +52,9 @@ func External(files []string, opt ExternalOptions) ([]Problem, error) {
 		for _, link := range markdown.Links(string(data)) {
 			lower := strings.ToLower(link.Target)
 			if !strings.HasPrefix(lower, "http://") && !strings.HasPrefix(lower, "https://") {
+				continue
+			}
+			if opt.Skip != nil && opt.Skip(link.Target) {
 				continue
 			}
 			if _, seen := uses[link.Target]; !seen {
