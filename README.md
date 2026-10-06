@@ -73,7 +73,7 @@ A Action deste repositório compila o `linkcheck` da versão escolhida em `uses:
 
 ```yaml
 - uses: actions/checkout@v7
-- uses: fabiodrneles/sdd-kit-demo@v1.0.0
+- uses: fabiodrneles/sdd-kit-demo@v0.3.0
   with:
     paths: docs README.md   # padrão: "."
     external: "true"        # também as URLs http(s)
