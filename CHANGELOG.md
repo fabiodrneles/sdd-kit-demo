@@ -4,6 +4,13 @@ Todas as mudanças relevantes deste projeto. Formato [Keep a Changelog](https://
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-06
+
+### Adicionado
+
+- publish binaries with GoReleaser after the release tag (#28)
+- add a GitHub Action that runs linkcheck (#29)
+
 ## [0.2.0] - 2026-10-06
 
 Fase 2 do [ROADMAP](specs/ROADMAP.md): links externos e integração (spec 002).
