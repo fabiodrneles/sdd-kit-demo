@@ -38,7 +38,7 @@ Numa sessão na web, o hook `.claude/hooks/session-start.sh` instala as dependê
 - **Branch:** uma por ticket, `<tipo>/<nº-da-issue>-<descrição>`, a partir da `main`.
 - **PR:** começa com `Closes #N · Épico #M · Spec NNN` e segue o template.
 - **Arquivos de status** (status das specs, checkboxes do ROADMAP, CHANGELOG) só mudam no PR de fechamento da fase.
-- **Merge, tag e release** são do dono, salvo delegação explícita para uma rodada.
+- **Merge, tag e release** são do dono, salvo delegação: `sh scripts/sdd-auto-merge.sh on` liga o merge automático (todo PR com o CI verde e sem conflito, inclusive os do relé), `off` desliga e `status` mostra. Quando o dono pedir para ligar ou desligar, rode o comando.
 - **Comandos do README:** um bloco ```` ```bash ```` com `<!-- doc-commands -->` na linha anterior roda no CI (`sh scripts/doc-commands.sh`); marque os exemplos que devem continuar funcionando.
 
 ## Armadilhas já conhecidas
@@ -61,6 +61,8 @@ Cada regra abaixo reduziu o gasto de sessões reais; aplique desde a primeira me
 - Entrega do ticket num comando: `sh scripts/sdd-pr.sh [--spec NNN] [--dry-run]` (merge da `main`, `make ci`, push, PR ou o já aberto, CI do PR e checkpoint; não faz merge).
 - Ambiente antes de `make ci`: `sh scripts/sdd-doctor.sh [--check]` confere e conserta ferramentas nas versões do CI, locale UTF-8 e PATH (uma linha por item); rode quando o hook de sessão não rodou (ex.: repositório anexado no meio da sessão) ou o `make ci` falhar por ferramenta.
 - Fechamento da versão num comando: `sh scripts/sdd-release.sh [--dry-run]` (a versão é sempre a do go-release-manager, nunca a do ROADMAP; X.Y.Z força só a pedido explícito do dono; branch `chore/release-vX.Y.Z`, rascunho do CHANGELOG pelos PRs mesclados, versões listadas em `.sdd-release`, commit e PR); com o PR mesclado, `sh scripts/sdd-release.sh --tag X.Y.Z` (dispara o *Release tag* ou cria a tag; não faz merge).
+- Custo medido, sem LLM: `sh scripts/sdd-report.sh tokens [--since DATA]` (sessão), `ticket '#N'` (janela do PR) e `phase '#ÉPICO'` (tabela num único comentário do épico); toda alegação de economia cita esse número.
+- **Uma sessão, um ticket (spec 018):** com o PR do ticket aberto e o checkpoint gravado, a sessão termina; o próximo ticket começa numa sessão nova a partir de `sh scripts/sdd-context.sh '#N'` (só as linhas citadas da spec, decisões, arquivos prováveis e a entrega), sem ler specs inteiras. `sh scripts/sdd-relay.sh` faz esse laço sem LLM no meio (um agente novo por ticket, espera do merge, próximo ticket; para no dono, no CI vermelho duas vezes ou no orçamento) e grava na issue o custo exato do ticket. Conversa longa com o dono não acumula trabalho de tickets; perto do teto de contexto (`SDD_SESSION_MAX_TOKENS`, hook `sdd-session-guard.sh`), faça commit WIP, grave o checkpoint e termine.
 - Edição mecânica por script que falha se o trecho não existir (ex.: `assert old in s` antes do `replace` em Python), sem reler o arquivo.
 - Checagem de mutação sem reler: copie o arquivo, quebre, rode o teste, restaure com `cp`.
 - Confira ferramentas e rede antes de começar (o proxy pode bloquear downloads); tente o gerenciador de pacotes do sistema.
