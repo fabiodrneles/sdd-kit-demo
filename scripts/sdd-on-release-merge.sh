@@ -67,10 +67,36 @@ SDD_RELEASE_PRE=ci sh "$release" --repo "$repo" --tag "$ver" || { echo "sdd-on-r
 # A fase fechou: abre o épico da próxima fase do ROADMAP (já aprovada pelo dono) e
 # grava o checkpoint nele, para um "continue" numa sessão nova achar o próximo passo (#191).
 open_epic="$(gh api "repos/$repo/issues?labels=%C3%A9pico&state=open&per_page=1" --jq '.[0].number // empty' 2> /dev/null || true)"
+# O épico da fase entregue (sem sub-issue aberta) é fechado aqui; antes, ficava aberto
+# e impedia a abertura da próxima fase (#217).
+if [ -n "$open_epic" ]; then
+  left="$(gh api "repos/$repo/issues/$open_epic/sub_issues?per_page=100" --jq '[.[] | select(.state == "open")] | length' 2> /dev/null || echo '?')"
+  if [ "$left" = 0 ]; then
+    gh api -X POST "repos/$repo/issues/$open_epic/comments" -f body="Fase entregue na $tag (PR #$pr); todos os tickets fechados. Épico fechado pelo motor." > /dev/null || true
+    if gh api -X PATCH "repos/$repo/issues/$open_epic" -f state=closed -f state_reason=completed > /dev/null; then
+      echo "épico #$open_epic fechado: fase entregue na $tag"
+      open_epic=""
+    fi
+  fi
+fi
+n=""
 if [ -n "$open_epic" ]; then
   echo "épico #$open_epic já aberto: próxima fase não aberta"
 elif next="$(sh "$here/sdd-next-phase.sh" 2> /dev/null)"; then
   t="$(printf '\t')"; n="${next%%"$t"*}"
+else
+  echo "nenhuma fase com tarefa aberta no ROADMAP: o dono escolhe a próxima"
+fi
+# Fase já entregue (épico fechado) com caixa ainda aberta no ROADMAP: o PR de
+# fechamento foi mesclado sem marcar o ROADMAP; reabri-la duplicaria a fase (#292).
+done_epic=""
+if [ -n "$n" ]; then
+  done_epic="$(gh api "repos/$repo/issues?labels=%C3%A9pico&state=closed&per_page=100" \
+    --jq "[.[] | select((.title + \" \") | startswith(\"Fase $n \"))][0].number // empty" 2> /dev/null || true)"
+fi
+if [ -n "$done_epic" ]; then
+  echo "sdd-on-release-merge: aviso: a Fase $n já foi entregue no épico #$done_epic, mas o ROADMAP ainda tem tarefa aberta; marque o ROADMAP (a fase não foi reaberta)" >&2
+elif [ -n "$n" ]; then
   echo "abrindo a Fase $n do ROADMAP"
   if sh "${SDD_EPIC_SH:-$here/sdd-epic.sh}" --repo "$repo" "$n"; then
     sh "$here/sdd-checkpoint.sh" --repo "$repo" --ci save "release $tag disparada; Fase $n aberta pelo motor" \
@@ -78,6 +104,4 @@ elif next="$(sh "$here/sdd-next-phase.sh" 2> /dev/null)"; then
   else
     echo "sdd-on-release-merge: aviso: não consegui abrir a Fase $n" >&2
   fi
-else
-  echo "nenhuma fase com tarefa aberta no ROADMAP: o dono escolhe a próxima"
 fi
